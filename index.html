@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Photo sphere with three.js</title>
+	<title>Photosphere</title>
 	<style>
-		html, body, #sphere { height: 100%; }
 		body { margin: 0; overflow: hidden; background-color: #000; }
-		.tm  { position: absolute; top: 10px; right: 10px; }		
-    </style>	
+		#sphere {width: 800px; height:600px; padding-left: 100px; padding-top: 50px;}
+    </style>
+	<script src="js/three.js"></script>
+	<script src="js/CameraControls.js"></script>
+	<script src="js/Detector.js"></script>
 </head>
 <body>
 	<div id="sphere"></div>
-	<a href="http://thematicmapping.org/" target="parent" class="tm">
-		<img src="http://thematicmapping.org/img/thematicmapping.png">
-	</a>	
-	<script src="js/three.min.js"></script>
-	<script src="js/OrbitControls.js"></script>	
-	<script src="js/Photosphere.js"></script>	
 	<script>
 
-	var photo = getParameterByName('photo');
+		var webglEl = document.getElementById('sphere');
 
-	if (photo) {
-		var photosphere = THREE.Photosphere(document.getElementById('sphere'), photo + '.jpg', {
-			view: getParameterByName('view'),
-			speed: getParameterByName('speed'),
-			y: getParameterByName('y')
-		});
-		window.onresize = photosphere.resize;
-	}
+		var width  = webglEl.offsetWidth;
+			height = webglEl.offsetHeight;
 
-	function getParameterByName(name) {
-		var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-		return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-	}
+		var scene = new THREE.Scene();
 
+		var camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
+		camera.position.x = 0.1;
+
+		var renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
+		renderer.setSize(width, height);
+
+		window.sphere = new THREE.Mesh(
+			new THREE.SphereGeometry(100, 20, 20),
+			new THREE.MeshBasicMaterial({
+				map: THREE.ImageUtils.loadTexture('index.jpg')
+			})
+		);
+		sphere.quaternion.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
+		sphere.scale.x = -1;
+		scene.add(sphere);
+
+		var controls = new CameraControls(webglEl, camera);
+
+		webglEl.appendChild(renderer.domElement);
+
+		render();
+
+		function render() {
+			controls.update();
+			requestAnimationFrame(render);
+			renderer.render(scene, camera);
+		}
 	</script>
 </body>
 </html>
