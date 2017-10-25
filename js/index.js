@@ -1,10 +1,10 @@
 var textureURLs = [  // URLs of the six faces of the cube map 
-	"Sunny2/Sunny2_posx.png",
-	"Sunny2/Sunny2_negx.png",
-	"Sunny2/Sunny2_posz.png",
-	"Sunny2/Sunny2_negz.png",
-	"Sunny2/Sunny2_negy.png",
-	"Sunny2/Sunny2_posy.png"
+	"Cubemaps/Chamonix_posx.png",
+	"Cubemaps/Chamonix_negx.png",
+	"Cubemaps/Chamonix_posz.png",
+	"Cubemaps/Chamonix_negz.png",
+	"Cubemaps/Chamonix_negy.png",
+	"Cubemaps/Chamonix_posy.png"
 ];
 
 var cube;

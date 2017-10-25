@@ -7,6 +7,7 @@ class CameraControls {
 		dom.addEventListener( 'mousedown', this.onMouseDown.bind(this), false );
 		dom.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
 		dom.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+		dom.addEventListener( 'mouseout', this.onMouseUp.bind(this), false );
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = false;
