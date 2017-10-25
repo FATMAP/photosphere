@@ -29,6 +29,9 @@ class CameraControls {
 
 	onMouseDown(event) {
 		this.mouse = true;
+
+		this.mousePos.x = event.offsetX / this.dom.offsetWidth * 2 - 1;
+		this.mousePos.y = -(event.offsetY / this.dom.offsetWidth * 2 - 1);
 	}
 
 	onMouseUp(event) {
@@ -39,10 +42,17 @@ class CameraControls {
 		if (!this.mouse)
 			return;
 
+		let lastMousePos = this.mousePos.clone();
+
 		this.mousePos.x = event.offsetX / this.dom.offsetWidth * 2 - 1;
 		this.mousePos.y = -(event.offsetY / this.dom.offsetWidth * 2 - 1);
 
-        this.raycaster.setFromCamera(this.mousePos, this.camera);
-        let direction = this.raycaster.ray.direction;
+		let diff = lastMousePos.clone().sub(this.mousePos);
+
+		this.tilt += diff.y;
+		this.spin -= diff.x;
+
+        // this.raycaster.setFromCamera(this.mousePos, this.camera);
+        // let direction = this.raycaster.ray.direction;
 	}
 }
