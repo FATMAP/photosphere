@@ -3,7 +3,7 @@ function clamp(value, min, max) {
 }
 
 class CameraControls {
-	constructor(dom, camera, clickCallback) {
+	constructor(dom, camera, clickCallback, poiCallback) {
 		this.dom = dom;
 		this.camera = camera;
 		this.clickCallback = clickCallback;
@@ -23,6 +23,17 @@ class CameraControls {
 		this.zoom = 0;
 		this.position = new THREE.Vector3();
 		this.mousePos = new THREE.Vector2();
+
+		this.pois = [
+			new THREE.Vector3(0.9239058997615655, 0.4449943946544958, -0.35094024714210814),
+			new THREE.Vector3(0.7894983995014908, 0.6595067953962015, -0.2994039811210184),
+			new THREE.Vector3(0.5625950543402208, 0.18146993616821464, -0.8677986390673083)
+		]
+
+		this.poiCallback = poiCallback;
+		this.update();
+		this.camera.updateMatrixWorld();
+		this.reportPositions();
 	}
 
 	getForwardVector() {
@@ -32,13 +43,14 @@ class CameraControls {
 
 	update() {
 		this.camera.quaternion.setFromEuler(new THREE.Euler(this.tilt, 0, this.spin, "ZYX"));
+		this.reportPositions();
 	}
 
 	onMouseDown(event) {
 		this.mouse = true;
 
 		this.mousePos.x = event.offsetX / this.dom.offsetWidth * 2 - 1;
-		this.mousePos.y = -(event.offsetY / this.dom.offsetWidth * 2 - 1);
+		this.mousePos.y = -(event.offsetY / this.dom.offsetHeight * 2 - 1);
 	}
 
 	onMouseUp(event) {
@@ -52,17 +64,26 @@ class CameraControls {
 		let lastMousePos = this.mousePos.clone();
 
 		this.mousePos.x = event.offsetX / this.dom.offsetWidth * 2 - 1;
-		this.mousePos.y = -(event.offsetY / this.dom.offsetWidth * 2 - 1);
+		this.mousePos.y = -(event.offsetY / this.dom.offsetHeight * 2 - 1);
 
 		let diff = lastMousePos.clone().sub(this.mousePos);
 
-		this.tilt += diff.y * this.camera.fov * 0.015;
+		this.tilt += diff.y * this.camera.fov * 0.01;
 		this.spin -= diff.x * this.camera.fov * 0.012 * this.camera.aspect;
 
 		this.tilt = clamp(this.tilt, Math.PI * 0.1, Math.PI * 0.9);
+	}
 
-        // this.raycaster.setFromCamera(this.mousePos, this.camera);
-        // let direction = this.raycaster.ray.direction;
+	reportPositions() {
+		for (var i = 0; i < this.pois.length; i++) {
+			let vector = this.pois[i].clone();
+			vector.project(this.camera);
+
+			vector.x = (vector.x + 1) * this.dom.offsetWidth / 2;
+			vector.y = (1 - vector.y) * this.dom.offsetHeight / 2;
+
+			this.poiCallback(vector.clone(), i)
+		}
 	}
 
 	onMouseWheel(event) {
@@ -76,6 +97,13 @@ class CameraControls {
 	}
 
 	onMouseClick(event) {
+		// let pos = new THREE.Vector2;
+		// pos.x = event.offsetX / this.dom.offsetWidth * 2 - 1;
+		// pos.y = -(event.offsetY / this.dom.offsetHeight * 2 - 1);
 
+  //       this.raycaster.setFromCamera(pos, this.camera);
+  //       let direction = this.raycaster.ray.direction;
+
+  //       console.log(direction)
 	}
 }

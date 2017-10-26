@@ -1,3 +1,24 @@
+var texts = [
+	"Canadian Bowl - Freeride - 40° - Serious",
+	"Pointe de Vue - Black Piste - 4km",
+	"Couloir de la Jeureumaz - Freeride - 41° - Serious"
+]
+var buttons = document.querySelectorAll('button');
+
+for (var i = 0; i < 3; i++) {
+	let index = i;
+	buttons[i].addEventListener('click', () => {
+		alert(texts[index]);
+	});
+}
+
+function poiMover(pos, index) {
+	buttons[index].style.top = (pos.y - 16) + "px";
+	buttons[index].style.left = (pos.x - 16) + "px";
+}
+
+
+
 var textureURLs = [  // URLs of the six faces of the cube map 
 	"Cubemaps/Chamonix_posx.jpg",
 	"Cubemaps/Chamonix_negx.jpg",
@@ -34,7 +55,7 @@ renderer.setSize(width, height);
 cube.quaternion.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
 scene.add(cube);
 
-var controls = new CameraControls(webglEl, camera);
+var controls = new CameraControls(webglEl, camera, null, poiMover);
 
 webglEl.appendChild(renderer.domElement);
 
