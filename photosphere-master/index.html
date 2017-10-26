@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Photosphere</title>
+	<style>
+		body { margin: 0; overflow: hidden; background-color: #000; }
+		#sphere { position: absolute; width: 100%; height:100%; }
+		.button {
+			background: url('../button.png') 0 0 no-repeat;
+			height: 42px;
+		    display: block;
+		    width: 237px;
+		    background-size: 237px 42px;
+		    cursor: pointer;
+		    position: absolute;
+		    top: 16px;
+		    right: 16px;
+		}
+	</style>
+	<script src="js/three.js"></script>
+	<script src="js/CameraControls.js"></script>
+	<script src="js/Detector.js"></script>
+</head>
+<body>
+	<div id="sphere">
+		<span class="button"></span>
+	</div>
+	<script src="js/index.js"></script>
+	<script>
+		document.querySelector('.button').addEventListener('click', () => {
+			window.parent.location = 'https://maps.fatmap.com';
+		});
+
+	</script>
+</body>
+</html>
