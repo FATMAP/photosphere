@@ -13,6 +13,7 @@ for (var i = 0; i < 3; i++) {
 }
 
 function poiMover(pos, index) {
+	buttons[index].style.display = pos.z < 0 ? "block" : "none" ;
 	buttons[index].style.top = (pos.y - 16) + "px";
 	buttons[index].style.left = (pos.x - 16) + "px";
 }
