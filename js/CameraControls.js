@@ -1,3 +1,7 @@
+function clamp(value, min, max) {
+    return value <= min ? min : (value >= max ? max : value);
+}
+
 class CameraControls {
 	constructor(dom, camera, clickCallback) {
 		this.dom = dom;
@@ -8,6 +12,7 @@ class CameraControls {
 		dom.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
 		dom.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
 		dom.addEventListener( 'mouseout', this.onMouseUp.bind(this), false );
+		dom.addEventListener( 'wheel', this.onMouseWheel.bind(this), false );
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = false;
@@ -50,10 +55,23 @@ class CameraControls {
 
 		let diff = lastMousePos.clone().sub(this.mousePos);
 
-		this.tilt += diff.y;
-		this.spin -= diff.x;
+		this.tilt += diff.y * this.camera.fov * 0.01;
+		this.spin -= diff.x * this.camera.fov * 0.01;
+
+		this.tilt = clamp(this.tilt, Math.PI * 0.1, Math.PI * 0.9);
 
         // this.raycaster.setFromCamera(this.mousePos, this.camera);
         // let direction = this.raycaster.ray.direction;
 	}
+
+	onMouseWheel(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		let fov = this.camera.fov;
+		fov = clamp(fov + event.deltaY * 0.0004 * fov, 10, 70);
+		this.camera.fov = fov;
+		camera.updateProjectionMatrix();
+	}
 }
+
