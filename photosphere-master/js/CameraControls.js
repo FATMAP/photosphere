@@ -13,12 +13,13 @@ class CameraControls {
 		dom.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
 		dom.addEventListener( 'mouseout', this.onMouseUp.bind(this), false );
 		dom.addEventListener( 'wheel', this.onMouseWheel.bind(this), false );
+		dom.addEventListener( 'click', this.onMouseClick.bind(this), false );
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = false;
 
-		this.spin = 0;
-		this.tilt = Math.PI / 2;
+		this.spin = -0.9633459269569827;
+		this.tilt = 0.812635402027862;
 		this.zoom = 0;
 		this.position = new THREE.Vector3();
 		this.mousePos = new THREE.Vector2();
@@ -55,8 +56,8 @@ class CameraControls {
 
 		let diff = lastMousePos.clone().sub(this.mousePos);
 
-		this.tilt += diff.y * this.camera.fov * 0.01;
-		this.spin -= diff.x * this.camera.fov * 0.01;
+		this.tilt += diff.y * this.camera.fov * 0.015;
+		this.spin -= diff.x * this.camera.fov * 0.012 * this.camera.aspect;
 
 		this.tilt = clamp(this.tilt, Math.PI * 0.1, Math.PI * 0.9);
 
@@ -72,5 +73,9 @@ class CameraControls {
 		fov = clamp(fov + event.deltaY * 0.0004 * fov, 10, 70);
 		this.camera.fov = fov;
 		camera.updateProjectionMatrix();
+	}
+
+	onMouseClick(event) {
+
 	}
 }

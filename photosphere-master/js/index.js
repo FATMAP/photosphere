@@ -1,10 +1,10 @@
 var textureURLs = [  // URLs of the six faces of the cube map 
-	"Cubemaps/Chamonix_posx.png",
-	"Cubemaps/Chamonix_negx.png",
-	"Cubemaps/Chamonix_posz.png",
-	"Cubemaps/Chamonix_negz.png",
-	"Cubemaps/Chamonix_negy.png",
-	"Cubemaps/Chamonix_posy.png"
+	"Cubemaps/Chamonix_posx.jpg",
+	"Cubemaps/Chamonix_negx.jpg",
+	"Cubemaps/Chamonix_posz.jpg",
+	"Cubemaps/Chamonix_negz.jpg",
+	"Cubemaps/Chamonix_negy.jpg",
+	"Cubemaps/Chamonix_posy.jpg"
 ];
 
 var cube;
@@ -14,14 +14,12 @@ var materials = [];
 for (var i = 0; i < 6; i++) {
 	materials.push( new THREE.MeshBasicMaterial( {
 		color: "white",
-		side: THREE.BackSide,  // IMPORTANT: To see the inside of the cube, back faces must be rendered!
+		side: THREE.FrontSide,  // IMPORTANT: To see the inside of the cube, back faces must be rendered!
 		map: textures[i]
 	} ) );
 }
 cube = new THREE.Mesh( new THREE.CubeGeometry(100,100,100), new THREE.MeshFaceMaterial(materials) );
-
-
-
+cube.scale.x = -1;
 
 var webglEl = document.getElementById('sphere');
 var width  = 780, height = 565;
@@ -32,16 +30,6 @@ camera.position.x = 0.1;
 
 var renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
 renderer.setSize(width, height);
-
-window.sphere = new THREE.Mesh(
-	new THREE.SphereGeometry(100, 20, 20),
-	new THREE.MeshBasicMaterial({
-		map: THREE.ImageUtils.loadTexture('index.jpg')
-	})
-);
-sphere.quaternion.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
-sphere.scale.x = -1;
-// scene.add(sphere);
 
 cube.quaternion.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
 scene.add(cube);
@@ -77,6 +65,8 @@ function loadTextures(textureURLs, callback) {
 }
 
 window.addEventListener( 'resize', onWindowResize, false );
+
+onWindowResize();
 
 function onWindowResize(){
     camera.aspect = webglEl.offsetWidth / webglEl.offsetHeight;
